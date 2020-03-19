@@ -3,7 +3,7 @@
 # jenkins variables
 project_name: docker-foldingathome
 external_type: na
-custom_version_command: "curl -sL https://download.foldingathome.org/js/fah-downloads.js | awk -F'(/debian-stable-64bit/|/fahclient_)' '/debian-stable-64bit/ {print $2;exit}'"
+custom_version_command: "curl -sL https://download.foldingathome.org/js/fah-downloads.js | awk -F'(fahclient_|_amd64.deb)' '/debian-stable-64bit/ {print $2;exit}'"
 release_type: stable
 release_tag: latest
 ls_branch: master

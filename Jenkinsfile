@@ -103,7 +103,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' curl -sL https://download.foldingathome.org/js/fah-downloads.js | awk -F'(/debian-stable-64bit/|/fahclient_)' '/debian-stable-64bit/ {print $2;exit}' ''',
+            script: ''' curl -sL https://download.foldingathome.org/js/fah-downloads.js | awk -F'(fahclient_|_amd64.deb)' '/debian-stable-64bit/ {print $2;exit}' ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }

@@ -27,12 +27,12 @@ pipeline {
     MULTIARCH='false'
     CI='true'
     CI_WEB='true'
-    CI_PORT='7369'
+    CI_PORT='7396'
     CI_SSL='false'
     CI_DELAY='120'
     CI_DOCKERENV='TZ=US/Pacific'
     CI_AUTH='user:password'
-    CI_WEBPATH='/web/index.html'
+    CI_WEBPATH=''
   }
   stages {
     // Setup all the basic environment variables needed for the build

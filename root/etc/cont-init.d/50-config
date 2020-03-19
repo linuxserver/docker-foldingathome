@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+
+# create folders
+mkdir -p /config
+
+# permissions on config root and folders
+chown -R abc:abc \
+	/app \
+	/config

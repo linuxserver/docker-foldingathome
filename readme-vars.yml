@@ -1,0 +1,67 @@
+---
+
+# project information
+project_name: foldingathome
+project_url: "https://foldingathome.org/"
+project_logo: "https://foldingathome.org/wp-content/uploads/2016/09/folding-at-home-logo.png"
+project_blurb: "[Folding@home]({{ project_url }}) is a distributed computing project for simulating protein dynamics, including the process of protein folding and the movements of proteins implicated in a variety of diseases. It brings together citizen scientists who volunteer to run simulations of protein dynamics on their personal computers. Insights from this data are helping scientists to better understand biology, and providing new opportunities for developing therapeutics."
+project_lsio_github_repo_url: "https://github.com/linuxserver/docker-{{ project_name }}"
+project_blurb_optional_extras_enabled: false
+
+# supported architectures
+available_architectures:
+  - { arch: "{{ arch_x86_64 }}", tag: "latest"}
+
+# development version
+development_versions: false
+
+# container parameters
+common_param_env_vars_enabled: true
+param_container_name: "{{ project_name }}"
+param_usage_include_net: false
+param_usage_include_env: true
+param_env_vars:
+  - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London." }
+param_usage_include_vols: true
+param_volumes:
+  - { vol_path: "/config", vol_host_path: "/path/to/data", desc: "Where BOINC should store its database and config." }
+param_usage_include_ports: true
+param_ports:
+  - { external_port: "7396", internal_port: "7396", port_desc: "F@H web gui." }
+param_device_map: false
+cap_add_param: false
+cap_add_param_vars: ''
+
+# optional container parameters
+opt_param_usage_include_env: false
+opt_param_env_vars:
+opt_param_usage_include_vols: false
+opt_param_usage_include_ports: false
+opt_param_device_map: true
+opt_param_devices:
+  - { device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Only needed if you want to use your Intel GPU (vaapi)." }
+opt_cap_add_param: false
+optional_block_1: false
+
+# application setup block
+app_setup_block_enabled: true
+app_setup_block: |
+  This image sets up the Folding@home client. The interface is available at `http://your-ip:7396`.
+  
+  ## GPU Hardware Acceleration
+  
+  ### Intel
+  
+  Hardware acceleration users for Intel Quicksync will need to mount their /dev/dri video device inside of the container by passing the following command when running or creating the container:
+  ```--device=/dev/dri:/dev/dri```
+  We will automatically ensure the abc user inside of the container has the proper permissions to access this device.
+  
+  ### Nvidia
+  
+  Hardware acceleration users for Nvidia will need to install the container runtime provided by Nvidia on their host, instructions can be found here:
+  https://github.com/NVIDIA/nvidia-docker
+  We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia-docker is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
+
+# changelog
+changelogs:
+  - { date: "19.03.20:", desc: "Initial release." }

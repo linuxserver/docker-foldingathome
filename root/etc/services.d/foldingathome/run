@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+
+cd /config
+
+exec \
+	s6-setuidgid abc /app/usr/bin/FAHClient \
+		--http-addresses 0.0.0.0:7396 --allow 0/0 --web-allow 0/0

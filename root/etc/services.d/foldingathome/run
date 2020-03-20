@@ -4,4 +4,4 @@ cd /config
 
 exec \
 	s6-setuidgid abc /app/usr/bin/FAHClient \
-		--http-addresses 0.0.0.0:7396 --allow 0/0 --web-allow 0/0
+		--http-addresses 0.0.0.0:7396 --allow 0/0 --web-allow 0/0 --command-allow-no-pass 0/0

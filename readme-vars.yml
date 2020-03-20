@@ -36,8 +36,10 @@ cap_add_param_vars: ''
 opt_param_usage_include_env: false
 opt_param_env_vars:
 opt_param_usage_include_vols: false
-opt_param_usage_include_ports: false
-opt_param_device_map: true
+opt_param_usage_include_ports: true
+opt_param_ports:
+  - { external_port: "36330", internal_port: "36330", port_desc: "Optional port for connecting remotely via FAHControl app (no password)." }
+opt_param_device_map: false
 opt_param_devices:
   - { device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Only needed if you want to use your Intel GPU (vaapi)." }
 opt_cap_add_param: false
@@ -48,13 +50,9 @@ app_setup_block_enabled: true
 app_setup_block: |
   This image sets up the Folding@home client. The interface is available at `http://your-ip:7396`.
   
+  The built-in webserver provides very basic control (ie. GPUs are only active when set to `Medium` or higher). For more fine grained control of individual devices, you can use the FAHControl app on a different device and connect remotely via port `36330` (no password).
+  
   ## GPU Hardware Acceleration
-  
-  ### Intel
-  
-  Hardware acceleration users for Intel Quicksync will need to mount their /dev/dri video device inside of the container by passing the following command when running or creating the container:
-  ```--device=/dev/dri:/dev/dri```
-  We will automatically ensure the abc user inside of the container has the proper permissions to access this device.
   
   ### Nvidia
   

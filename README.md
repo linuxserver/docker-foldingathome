@@ -66,8 +66,8 @@ docker create \
   -e PGID=1000 \
   -e TZ=Europe/London \
   -p 7396:7396 \
+  -p 36330:36330 `#optional` \
   -v /path/to/data:/config \
-  --device /dev/dri:/dev/dri `#optional` \
   --restart unless-stopped \
   linuxserver/foldingathome
 ```
@@ -92,8 +92,7 @@ services:
       - /path/to/data:/config
     ports:
       - 7396:7396
-    devices:
-      - /dev/dri:/dev/dri #optional
+      - 36330:36330 #optional
     restart: unless-stopped
 ```
 
@@ -104,11 +103,11 @@ Container images are configured using parameters passed at runtime (such as thos
 | Parameter | Function |
 | :----: | --- |
 | `-p 7396` | F@H web gui. |
+| `-p 36330` | Optional port for connecting remotely via FAHControl app (no password). |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. |
 | `-v /config` | Where BOINC should store its database and config. |
-| `--device /dev/dri` | Only needed if you want to use your Intel GPU (vaapi). |
 
 ## Environment variables from files (Docker secrets)
 
@@ -141,13 +140,9 @@ In this instance `PUID=1000` and `PGID=1000`, to find yours use `id user` as bel
 
 This image sets up the Folding@home client. The interface is available at `http://your-ip:7396`.
 
+The built-in webserver provides very basic control (ie. GPUs are only active when set to `Medium` or higher). For more fine grained control of individual devices, you can use the FAHControl app on a different device and connect remotely via port `36330` (no password).
+
 ## GPU Hardware Acceleration
-
-### Intel
-
-Hardware acceleration users for Intel Quicksync will need to mount their /dev/dri video device inside of the container by passing the following command when running or creating the container:
-```--device=/dev/dri:/dev/dri```
-We will automatically ensure the abc user inside of the container has the proper permissions to access this device.
 
 ### Nvidia
 

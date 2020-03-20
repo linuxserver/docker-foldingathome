@@ -17,7 +17,9 @@ RUN \
  echo "**** install runtime packages ****" && \
  apt-get update && \
  apt-get install -y \
-	nvidia-opencl-dev && \
+	libnvidia-compute-435 \
+	ocl-icd-libopencl1 && \
+ ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
  echo "**** install foldingathome ****" && \
  if [ -z ${FOLDINGATHOME_RELEASE+x} ]; then \
  	FOLDINGATHOME_RELEASE="$(curl -sL https://download.foldingathome.org/js/fah-downloads.js \

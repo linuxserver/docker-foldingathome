@@ -24,10 +24,10 @@ param_env_vars:
   - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London." }
 param_usage_include_vols: true
 param_volumes:
-  - { vol_path: "/config", vol_host_path: "/path/to/data", desc: "Where BOINC should store its database and config." }
+  - { vol_path: "/config", vol_host_path: "/path/to/data", desc: "Where Folding@home should store its database and config." }
 param_usage_include_ports: true
 param_ports:
-  - { external_port: "7396", internal_port: "7396", port_desc: "F@H web gui." }
+  - { external_port: "7396", internal_port: "7396", port_desc: "Folding@home web gui." }
 param_device_map: false
 cap_add_param: false
 cap_add_param_vars: ''
@@ -62,4 +62,4 @@ app_setup_block: |
 
 # changelog
 changelogs:
-  - { date: "19.03.20:", desc: "Initial release." }
+  - { date: "20.03.20:", desc: "Initial release." }

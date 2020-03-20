@@ -102,12 +102,12 @@ Container images are configured using parameters passed at runtime (such as thos
 
 | Parameter | Function |
 | :----: | --- |
-| `-p 7396` | F@H web gui. |
+| `-p 7396` | Folding@home web gui. |
 | `-p 36330` | Optional port for connecting remotely via FAHControl app (no password). |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Europe/London` | Specify a timezone to use EG Europe/London. |
-| `-v /config` | Where BOINC should store its database and config. |
+| `-v /config` | Where Folding@home should store its database and config. |
 
 ## Environment variables from files (Docker secrets)
 
@@ -216,4 +216,4 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
-* **19.03.20:** - Initial release.
+* **20.03.20:** - Initial release.

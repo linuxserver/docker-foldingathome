@@ -52,6 +52,10 @@ app_setup_block: |
   
   The built-in webserver provides very basic control (ie. GPUs are only active when set to `Medium` or higher). For more fine grained control of individual devices, you can use the FAHControl app on a different device and connect remotely via port `36330` (no password).
   
+  There are a couple of minor issues with the webgui:
+  - If you get an "ERR_EMPTY_RESPONSE" error when trying to access via IP, it's most likely due to a clash of cookies/cache. Try opening in an incgnito window.
+  - If you're getting a constant refresh of the window but no display of info, try a force refresh via `shft-F5` or `ctrl-F5`.
+
   ## GPU Hardware Acceleration
   
   ### Nvidia
@@ -62,4 +66,5 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "14.04.20:", desc: "Add Folding@home donation links." }
   - { date: "20.03.20:", desc: "Initial release." }

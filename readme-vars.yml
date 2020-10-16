@@ -66,5 +66,6 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "16.10.20:", desc: "Fix upstream version retrieval." }
   - { date: "14.04.20:", desc: "Add Folding@home donation links." }
   - { date: "20.03.20:", desc: "Initial release." }

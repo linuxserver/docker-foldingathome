@@ -21,15 +21,14 @@ RUN \
 	ocl-icd-libopencl1 && \
  ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
  echo "**** install foldingathome ****" && \
+ MAJOR_VERSION="$(curl -sL https://download.foldingathome.org/js/fah-downloads.js | grep 'series = typeof _series == ' | awk -F\' '{print $4}')" && \
  if [ -z ${FOLDINGATHOME_RELEASE+x} ]; then \
- 	FOLDINGATHOME_RELEASE="$(curl -sL https://download.foldingathome.org/js/fah-downloads.js \
+	FOLDINGATHOME_RELEASE="$(curl -sL https://download.foldingathome.org/releases.py?series=$MAJOR_VERSION \
 	| awk -F'(fahclient_|_amd64.deb)' '/debian-stable-64bit/ {print $2;exit}')"; \
  fi && \
- MAJOR_VERSION="$(curl -sL https://download.foldingathome.org/js/fah-downloads.js \
-	| awk -F'(/debian-stable-64bit/|/fahclient_)' '/debian-stable-64bit/ {print $2;exit}')" && \
  curl -o \
 	/tmp/fah.deb -L \
-	"https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/${MAJOR_VERSION}/fahclient_${FOLDINGATHOME_RELEASE}_amd64.deb" && \
+	"https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v${MAJOR_VERSION}/fahclient_${FOLDINGATHOME_RELEASE}_amd64.deb" && \
  dpkg -x /tmp/fah.deb /app && \
  echo "**** cleanup ****" && \
  apt-get clean && \

@@ -233,5 +233,6 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **16.10.20:** - Fix upstream version retrieval.
 * **14.04.20:** - Add Folding@home donation links.
 * **20.03.20:** - Initial release.

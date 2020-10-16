@@ -103,7 +103,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' MAJOR_VERSION=$(curl -sL https://download.foldingathome.org/js/fah-downloads.js | grep 'series = typeof _series == ' | awk -F\' '{print $4}') && curl -sL https://download.foldingathome.org/releases.py?series="$MAJOR_VERSION" | awk -F'(fahclient_|_amd64.deb)' '/debian-stable-64bit/ {print $2;exit}' ''',
+            script: ''' MAJOR_VERSION=$(curl -sL https://download.foldingathome.org/js/fah-downloads.js | grep 'series = typeof _series == ' | awk -F\' '{print $4}' && curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | awk -F'(fahclient_|_amd64.deb)' '/debian-stable-64bit/ {print $2;exit}' ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }

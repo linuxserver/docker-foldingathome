@@ -11,25 +11,22 @@ LABEL maintainer="aptalca"
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 # global environment settings
-ENV DEBIAN_FRONTEND="noninteractive"
+ENV DEBIAN_FRONTEND="noninteractive" \
+    MAJOR_VERSION=7.6
 
 RUN \
  echo "**** install runtime packages ****" && \
  apt-get update && \
  apt-get install -y \
 	libnvidia-compute-435 \
+	jq \
 	ocl-icd-libopencl1 && \
  ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
  echo "**** install foldingathome ****" && \
- if [ -z ${FOLDINGATHOME_RELEASE+x} ]; then \
- 	FOLDINGATHOME_RELEASE="$(curl -sL https://download.foldingathome.org/js/fah-downloads.js \
-	| awk -F'(fahclient_|_amd64.deb)' '/debian-stable-64bit/ {print $2;exit}')"; \
- fi && \
- MAJOR_VERSION="$(curl -sL https://download.foldingathome.org/js/fah-downloads.js \
-	| awk -F'(/debian-stable-64bit/|/fahclient_)' '/debian-stable-64bit/ {print $2;exit}')" && \
+ download_url=$(curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].url') && \
  curl -o \
 	/tmp/fah.deb -L \
-	"https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/${MAJOR_VERSION}/fahclient_${FOLDINGATHOME_RELEASE}_amd64.deb" && \
+	${download_url} && \
  dpkg -x /tmp/fah.deb /app && \
  echo "**** cleanup ****" && \
  apt-get clean && \

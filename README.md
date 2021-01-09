@@ -233,5 +233,6 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **09.01.21:** - Add nvidia.icd.
 * **14.04.20:** - Add Folding@home donation links.
 * **20.03.20:** - Initial release.

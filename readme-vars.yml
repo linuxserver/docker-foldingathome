@@ -66,5 +66,6 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "09.01.21:", desc: "Add nvidia.icd." }
   - { date: "14.04.20:", desc: "Add Folding@home donation links." }
   - { date: "20.03.20:", desc: "Initial release." }

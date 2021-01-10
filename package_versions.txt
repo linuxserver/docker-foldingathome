@@ -72,9 +72,6 @@ libncurses56.1-1ubuntu1.18.04
 libncursesw56.1-1ubuntu1.18.04
 libnettle63.4-1
 libnghttp2-141.30.0-1ubuntu1
-libnvidia-compute-435455.45.01-0ubuntu0.18.04.1
-libnvidia-compute-455460.32.03-0ubuntu0.18.04.1
-libnvidia-compute-460460.32.03-0ubuntu0.18.04.1
 libonig46.7.0-1
 libp11-kit00.23.9-2ubuntu0.1
 libpam0g1.1.8-3.6ubuntu2.18.04.2

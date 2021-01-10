@@ -18,7 +18,6 @@ RUN \
  echo "**** install runtime packages ****" && \
  apt-get update && \
  apt-get install -y \
-	libnvidia-compute-435 \
 	jq \
 	ocl-icd-libopencl1 && \
  ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \

@@ -103,8 +103,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' curl -sL https://download.foldingathome.org/releases.py?series=7.6 | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].filename' | awk -F'(fahclient_|_amd64.deb)' '{print $2}'
- ''',
+            script: ''' curl -sL https://download.foldingathome.org/releases.py?series=7.6 | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].filename' | awk -F'(fahclient_|_amd64.deb)' '{print $2}' ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }

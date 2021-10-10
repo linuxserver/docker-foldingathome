@@ -12,27 +12,27 @@ ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 # global environment settings
 ENV DEBIAN_FRONTEND="noninteractive" \
-    MAJOR_VERSION=7.6
+  MAJOR_VERSION=7.6
 
 RUN \
- echo "**** install runtime packages ****" && \
- apt-get update && \
- apt-get install -y \
-	jq \
-	ocl-icd-libopencl1 && \
- ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
- echo "**** install foldingathome ****" && \
- download_url=$(curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].url') && \
- curl -o \
-	/tmp/fah.deb -L \
-	${download_url} && \
- dpkg -x /tmp/fah.deb /app && \
- echo "**** cleanup ****" && \
- apt-get clean && \
- rm -rf \
-	/tmp/* \
-	/var/lib/apt/lists/* \
-	/var/tmp/*
+  echo "**** install runtime packages ****" && \
+  apt-get update && \
+  apt-get install -y \
+    jq \
+    ocl-icd-libopencl1 && \
+  ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
+  echo "**** install foldingathome ****" && \
+  download_url=$(curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].url') && \
+  curl -o \
+    /tmp/fah.deb -L \
+    ${download_url} && \
+  dpkg -x /tmp/fah.deb /app && \
+  echo "**** cleanup ****" && \
+  apt-get clean && \
+  rm -rf \
+    /tmp/* \
+    /var/lib/apt/lists/* \
+    /var/tmp/*
 
 # add local files
 COPY root/ /

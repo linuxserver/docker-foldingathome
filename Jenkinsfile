@@ -25,7 +25,7 @@ pipeline {
     DEV_DOCKERHUB_IMAGE = 'lsiodev/foldingathome'
     PR_DOCKERHUB_IMAGE = 'lspipepr/foldingathome'
     DIST_IMAGE = 'ubuntu'
-    MULTIARCH='false'
+    MULTIARCH='true'
     CI='true'
     CI_WEB='true'
     CI_PORT='7396'

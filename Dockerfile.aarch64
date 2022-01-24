@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+FROM ghcr.io/linuxserver/baseimage-ubuntu:arm64v8-focal
 
 # set version label
 ARG BUILD_DATE
@@ -20,9 +20,9 @@ RUN \
   apt-get install -y \
     jq \
     ocl-icd-libopencl1 && \
-  ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
+  ln -s libOpenCL.so.1 /usr/lib/aarch64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
-  download_url=$(curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fahclient" | grep "deb" | grep "amd64") && \
+  download_url=$(curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fahclient" | grep "deb" | grep "arm64") && \
   curl -o \
     /tmp/fah.deb -L \
     ${download_url} && \

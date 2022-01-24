@@ -11,6 +11,7 @@ project_blurb_optional_extras_enabled: false
 # supported architectures
 available_architectures:
   - { arch: "{{ arch_x86_64 }}", tag: "latest"}
+  - { arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
 
 # development version
 development_versions: false
@@ -66,6 +67,7 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "15.01.22:", desc: "Rebase to Ubuntu Focal. Add arm64v8 builds (cpu only). Increase verbosity about gpu driver permission settings." }
   - { date: "09.01.21:", desc: "Add nvidia.icd." }
   - { date: "14.04.20:", desc: "Add Folding@home donation links." }
   - { date: "20.03.20:", desc: "Initial release." }

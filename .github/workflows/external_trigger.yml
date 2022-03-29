@@ -18,7 +18,7 @@ jobs:
           fi
           echo "**** External trigger running off of master branch. To disable this trigger, set a Github secret named \"PAUSE_EXTERNAL_TRIGGER_FOLDINGATHOME_MASTER\". ****"
           echo "**** Retrieving external version ****"
-          EXT_RELEASE=$(curl -sL https://download.foldingathome.org/releases.py?series=7.6 | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].filename' | awk -F'(fahclient_|_amd64.deb)' '{print $2}')
+          EXT_RELEASE=$(curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py?series=7.6 | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].filename' | awk -F'(fahclient_|_amd64.deb)' '{print $2}')
           if [ -z "${EXT_RELEASE}" ] || [ "${EXT_RELEASE}" == "null" ]; then
             echo "**** Can't retrieve external version, exiting ****"
             FAILURE_REASON="Can't retrieve external version for foldingathome branch master"

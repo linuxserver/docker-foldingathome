@@ -22,7 +22,7 @@ RUN \
     ocl-icd-libopencl1 && \
   ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
-  download_url=$(curl -sL https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fahclient" | grep "deb" | grep "amd64") && \
+  download_url=$(curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fahclient" | grep "deb" | grep "amd64") && \
   curl -o \
     /tmp/fah.deb -L \
     ${download_url} && \

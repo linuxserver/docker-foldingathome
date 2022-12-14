@@ -4,6 +4,6 @@
 mkdir -p /config
 
 # permissions on config root and folders
-chown -R abc:abc \
+lsiown -R abc:abc \
     /app \
     /config

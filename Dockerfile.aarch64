@@ -1,4 +1,6 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:arm64v8-focal
+# syntax=docker/dockerfile:1
+
+FROM ghcr.io/linuxserver/baseimage-ubuntu:arm64v8-jammy
 
 # set version label
 ARG BUILD_DATE
@@ -18,7 +20,6 @@ RUN \
   echo "**** install runtime packages ****" && \
   apt-get update && \
   apt-get install -y \
-    jq \
     ocl-icd-libopencl1 && \
   ln -s libOpenCL.so.1 /usr/lib/aarch64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
@@ -32,11 +33,13 @@ RUN \
   rm -rf \
     /tmp/* \
     /var/lib/apt/lists/* \
-    /var/tmp/*
+    /var/tmp/* \
+    /var/log/*
 
 # add local files
 COPY root/ /
 
 # ports and volumes
 EXPOSE 7396
+
 VOLUME /config

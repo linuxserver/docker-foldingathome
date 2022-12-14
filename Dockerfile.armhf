@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
 
 # set version label
 ARG BUILD_DATE
@@ -8,6 +8,6 @@ LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DA
 LABEL maintainer="aptalca"
 
 # add local files
-COPY root/ /
+COPY root-armhf/ /
 
 # This FoldingAtHome image does not support 32 bit ARM due to lack of 32 bit binaries

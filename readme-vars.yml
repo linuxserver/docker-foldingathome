@@ -67,6 +67,7 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "14.12.22:", desc: "Rebase to Ubuntu Jammy, migrate to s6v3." }
   - { date: "15.01.22:", desc: "Rebase to Ubuntu Focal. Add arm64v8 builds (cpu only). Increase verbosity about gpu driver permission settings." }
   - { date: "09.01.21:", desc: "Add nvidia.icd." }
   - { date: "14.04.20:", desc: "Add Folding@home donation links." }

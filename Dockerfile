@@ -1,4 +1,4 @@
-FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
 
 # set version label
 ARG BUILD_DATE
@@ -18,7 +18,6 @@ RUN \
   echo "**** install runtime packages ****" && \
   apt-get update && \
   apt-get install -y \
-    jq \
     ocl-icd-libopencl1 && \
   ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
@@ -32,11 +31,13 @@ RUN \
   rm -rf \
     /tmp/* \
     /var/lib/apt/lists/* \
-    /var/tmp/*
+    /var/tmp/* \
+    /var/log/*
 
 # add local files
 COPY root/ /
 
 # ports and volumes
 EXPOSE 7396
+
 VOLUME /config

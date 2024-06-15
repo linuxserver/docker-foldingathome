@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ghcr.io/linuxserver/baseimage-ubuntu:jammy
+FROM ghcr.io/linuxserver/baseimage-ubuntu:noble
 
 # set version label
 ARG BUILD_DATE
@@ -9,7 +9,7 @@ ARG FOLDINGATHOME_RELEASE
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="aptalca"
 
-#Add needed nvidia environment variables for https://github.com/NVIDIA/nvidia-docker
+#Add needed nvidia environment variables for container toolkit
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 # global environment settings
@@ -28,6 +28,7 @@ RUN \
     /tmp/fah.deb -L \
     ${download_url} && \
   dpkg -x /tmp/fah.deb /app && \
+  printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   echo "**** cleanup ****" && \
   apt-get clean && \
   rm -rf \

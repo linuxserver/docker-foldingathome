@@ -21,8 +21,6 @@ common_param_env_vars_enabled: true
 param_container_name: "{{ project_name }}"
 param_usage_include_net: false
 param_usage_include_env: true
-param_env_vars:
-  - { env_var: "TZ", env_value: "Europe/London", desc: "Specify a timezone to use EG Europe/London." }
 param_usage_include_vols: true
 param_volumes:
   - { vol_path: "/config", vol_host_path: "/path/to/data", desc: "Where Folding@home should store its database and config." }
@@ -34,8 +32,9 @@ cap_add_param: false
 cap_add_param_vars: ''
 
 # optional container parameters
-opt_param_usage_include_env: false
+opt_param_usage_include_env: true
 opt_param_env_vars:
+  - { env_var: "CLI_ARGS", env_value: "", desc: "Optionally pass additional cli arguments to `FAHClient` on container start." }
 opt_param_usage_include_vols: false
 opt_param_usage_include_ports: true
 opt_param_ports:
@@ -43,8 +42,6 @@ opt_param_ports:
 opt_param_device_map: false
 opt_param_devices:
   - { device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Only needed if you want to use your Intel GPU (vaapi)." }
-opt_cap_add_param: false
-optional_block_1: false
 
 # application setup block
 app_setup_block_enabled: true
@@ -62,11 +59,12 @@ app_setup_block: |
   ### Nvidia
   
   Hardware acceleration users for Nvidia will need to install the container runtime provided by Nvidia on their host, instructions can be found here:
-  https://github.com/NVIDIA/nvidia-docker
-  We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia-docker is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
+  https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html  
+  We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia container toolkit is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
 
 # changelog
 changelogs:
+  - { date: "15.06.24:", desc: "Rebase to Ubuntu Noble, add optional cli args." }
   - { date: "14.12.22:", desc: "Rebase to Ubuntu Jammy, migrate to s6v3." }
   - { date: "15.01.22:", desc: "Rebase to Ubuntu Focal. Add arm64v8 builds (cpu only). Increase verbosity about gpu driver permission settings." }
   - { date: "09.01.21:", desc: "Add nvidia.icd." }

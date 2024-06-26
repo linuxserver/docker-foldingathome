@@ -3,7 +3,7 @@
 # jenkins variables
 project_name: docker-foldingathome
 external_type: na
-custom_version_command: "curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py?series=7.6 | jq -r '.[] | select(.title==\"64bit Linux\") | .groups[0].files[0].filename' | awk -F'(fahclient_|_amd64.deb)' '{print $2}'"
+custom_version_command: "curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py | jq -r '.[] | select(.title==\"64bit Linux\") | .groups[0].files[0].filename' | awk -F'(fah-client_|_amd64.deb)' '{print $2}'"
 release_type: stable
 release_tag: latest
 ls_branch: master
@@ -23,8 +23,8 @@ repo_vars:
   - CI_PORT='7396'
   - CI_SSL='false'
   - CI_DELAY='120'
-  - CI_DOCKERENV='TZ=US/Pacific'
-  - CI_AUTH='user:password'
+  - CI_DOCKERENV=''
+  - CI_AUTH=''
   - CI_WEBPATH=''
 sponsor_links:
   - { name: "Folding@home", url: "https://foldingathome.org/about/donate/" }

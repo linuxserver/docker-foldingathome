@@ -31,8 +31,8 @@ pipeline {
     CI_PORT='7396'
     CI_SSL='false'
     CI_DELAY='120'
-    CI_DOCKERENV='TZ=US/Pacific'
-    CI_AUTH='user:password'
+    CI_DOCKERENV=''
+    CI_AUTH=''
     CI_WEBPATH=''
   }
   stages {
@@ -115,7 +115,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py?series=7.6 | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].filename' | awk -F'(fahclient_|_amd64.deb)' '{print $2}' ''',
+            script: ''' curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py | jq -r '.[] | select(.title=="64bit Linux") | .groups[0].files[0].filename' | awk -F'(fah-client_|_amd64.deb)' '{print $2}' ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }

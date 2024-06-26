@@ -13,21 +13,20 @@ LABEL maintainer="aptalca"
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 # global environment settings
-ENV DEBIAN_FRONTEND="noninteractive" \
-  MAJOR_VERSION=7.6
+ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN \
   echo "**** install runtime packages ****" && \
   apt-get update && \
   apt-get install -y \
-    ocl-icd-libopencl1 && \
+    intel-opencl-icd && \
   ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
-  download_url=$(curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py?series=${MAJOR_VERSION} | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fahclient" | grep "deb" | grep "amd64") && \
+  download_url=$(curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fah-client" | grep "amd64.deb") && \
   curl -o \
     /tmp/fah.deb -L \
     ${download_url} && \
-  dpkg -x /tmp/fah.deb /app && \
+  dpkg -x /tmp/fah.deb / && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   echo "**** cleanup ****" && \
   apt-get clean && \

@@ -1,8 +1,27 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
+if [[ -n "${ACCOUNT_TOKEN}" ]] && [[ -n "${MACHINE_NAME}" ]]; then
+    TOKEN_AND_NAME="--account-token ${ACCOUNT_TOKEN} --machine-name ${MACHINE_NAME}"
+else
+    echo '
+***************************************************************************
+***************************************************************************
+****                                                                   ****
+****                                                                   ****
+****    On first run, both the ACCOUNT_TOKEN and the MACHINE_NAME      ****
+**** env vars are required. Please set them and recreate the container ****
+****    unless the instance was previously added to online account.    ****
+****                                                                   ****
+****                                                                   ****
+***************************************************************************
+***************************************************************************
+'
+fi
+
+
 exec \
     s6-notifyoncheck -d -n 300 -w 1000 -c "nc -z localhost 7396" \
-        cd /config s6-setuidgid abc /app/usr/bin/FAHClient \
-            --http-addresses 0.0.0.0:7396 --allow 0/0 --web-allow 0/0 --command-allow-no-pass 0/0 \
-            $CLI_ARGS
+        cd /config s6-setuidgid abc fah-client \
+            --http-addresses 0.0.0.0:7396 --allow 0/0 ${TOKEN_AND_NAME} \
+            ${CLI_ARGS}

@@ -19,14 +19,15 @@ RUN \
   echo "**** install runtime packages ****" && \
   apt-get update && \
   apt-get install -y \
+    bzip2 \
     intel-opencl-icd && \
   ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
-  download_url=$(curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fah-client" | grep "amd64.deb") && \
+  download_url=$(curl -H 'Accept-Encoding: gzip' -fSsL --compressed https://download.foldingathome.org/releases.py | jq -r '.[] | select(.title=="64bit Linux") | .groups[].files[].url' | grep "fah-client" | grep -v "arm64" | grep "tar.bz2") && \
   curl -o \
-    /tmp/fah.deb -L \
+    /tmp/fah.tar.bz2 -L \
     ${download_url} && \
-  dpkg -x /tmp/fah.deb / && \
+  tar xf /tmp/fah.tar.bz2 -C /app --strip-components=1 && \
   printf "Linuxserver.io version: ${VERSION}\nBuild-date: ${BUILD_DATE}" > /build_version && \
   echo "**** cleanup ****" && \
   apt-get clean && \

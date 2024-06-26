@@ -22,6 +22,6 @@ fi
 
 exec \
     s6-notifyoncheck -d -n 300 -w 1000 -c "nc -z localhost 7396" \
-        cd /config s6-setuidgid abc fah-client \
+        cd /config s6-setuidgid abc /app/fah-client \
             --http-addresses 0.0.0.0:7396 --allow 0/0 ${TOKEN_AND_NAME} \
             ${CLI_ARGS}

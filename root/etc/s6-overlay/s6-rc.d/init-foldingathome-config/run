@@ -1,9 +1,6 @@
 #!/usr/bin/with-contenv bash
 # shellcheck shell=bash
 
-# create folders
-mkdir -p /config
-
 # permissions on config root and folders
 lsiown -R abc:abc \
     /config

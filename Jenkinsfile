@@ -589,8 +589,9 @@ pipeline {
               --provenance=false --sbom=false \
               --build-arg ${BUILD_VERSION_ARG}=${EXT_RELEASE} --build-arg VERSION=\"${VERSION_TAG}\" --build-arg BUILD_DATE=${GITHUB_DATE} ."
             sh "docker tag ${IMAGE}:arm64v8-${META_TAG} ghcr.io/linuxserver/lsiodev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER}"
-            retry(5) {
-              sh "docker push ghcr.io/linuxserver/lsiodev-buildcache:arm64v8-${COMMIT_SHA}-${BUILD_NUMBER}"
+            retry_backoff(5) {
+              sh "echo 'intentionally failing this step'"
+              sh "exit 1"
             }
             sh '''#! /bin/bash
                   containers=$(docker ps -aq)
@@ -745,9 +746,11 @@ pipeline {
             passwordVariable: 'QUAYPASS'
           ]
         ]) {
-          retry(5) {
+          retry_backoff(5) {
             sh '''#! /bin/bash
                   set -e
+                  echo "intentionally failing"
+                  exit 1
                   echo $DOCKERHUB_TOKEN | docker login -u linuxserverci --password-stdin
                   echo $GITHUB_TOKEN | docker login ghcr.io -u LinuxServer-CI --password-stdin
                   echo $GITLAB_TOKEN | docker login registry.gitlab.com -u LinuxServer.io --password-stdin
@@ -786,9 +789,11 @@ pipeline {
             passwordVariable: 'QUAYPASS'
           ]
         ]) {
-          retry(5) {
+          retry_backoff(5) {
             sh '''#! /bin/bash
                   set -e
+                  echo "intentionally failing"
+                  exit 1
                   echo $DOCKERHUB_TOKEN | docker login -u linuxserverci --password-stdin
                   echo $GITHUB_TOKEN | docker login ghcr.io -u LinuxServer-CI --password-stdin
                   echo $GITLAB_TOKEN | docker login registry.gitlab.com -u LinuxServer.io --password-stdin
@@ -1009,4 +1014,21 @@ EOF
       cleanWs()
     }
   }
+}
+
+def retry_backoff(int max_attempts, Closure c) {
+    int n = 0
+    while (n < max_attempts) {
+        try {
+            c()
+            return
+        } catch (err) {
+            if ((n + 1) >= max_attempts) {
+                throw err
+            }
+            sleep(4**n)
+            n++
+        }
+    }
+    return
 }

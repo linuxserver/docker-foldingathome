@@ -81,6 +81,11 @@ Hardware acceleration users for Nvidia will need to install the container runtim
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia container toolkit is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
 
+## Read-Only Operation
+
+This image can be run with a read-only container filesystem. For details please [read the docs](https://docs.linuxserver.io/misc/read-only/).
+
+
 ## Usage
 
 To help you get started creating a container from this image you can either use docker-compose or the docker cli.
@@ -138,6 +143,7 @@ Containers are configured using parameters passed at runtime (such as those abov
 | `-e MACHINE_NAME=` | Assign a friendly name to this instance (no spaces). Required on first start. |
 | `-e CLI_ARGS=` | Optionally pass additional cli arguments to `fah-client` on container start. |
 | `-v /config` | Where Folding@home should store its database and config. |
+| `--read-only=true` | Run container with a read-only filesystem. Please [read the docs](https://docs.linuxserver.io/misc/read-only/). |
 
 ## Environment variables from files (Docker secrets)
 

@@ -306,6 +306,7 @@ Once registered you can define the dockerfile to use with `-f Dockerfile.aarch64
 
 ## Versions
 
+* **10.08.24:** - Add libexpat1 for Nvidia support.
 * **25.06.24:** - ***Breaking Changes*** - Please see the Application Setup section for more details. Restructure image for F@H v8.
 * **15.06.24:** - Rebase to Ubuntu Noble, add optional cli args.
 * **14.12.22:** - Rebase to Ubuntu Jammy, migrate to s6v3.

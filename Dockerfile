@@ -20,7 +20,8 @@ RUN \
   apt-get update && \
   apt-get install -y \
     bzip2 \
-    intel-opencl-icd && \
+    intel-opencl-icd \
+    libexpat1 && \
   ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
   download_url="https://download.foldingathome.org/releases/public/fah-client/"$(curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("debian")) and (.package | contains("release"))) | .package' | grep -v "arm64" | grep "tar.bz2") && \

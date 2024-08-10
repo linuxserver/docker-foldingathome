@@ -63,6 +63,7 @@ app_setup_block: |
 
 # changelog
 changelogs:
+  - { date: "10.08.24:", desc: "Add libexpat1 for Nvidia support." }
   - { date: "25.06.24:", desc: "***Breaking Changes*** - Please see the Application Setup section for more details. Restructure image for F@H v8." }
   - { date: "15.06.24:", desc: "Rebase to Ubuntu Noble, add optional cli args." }
   - { date: "14.12.22:", desc: "Rebase to Ubuntu Jammy, migrate to s6v3." }

@@ -6,36 +6,31 @@ project_url: "https://foldingathome.org/"
 project_logo: "https://foldingathome.org/wp-content/uploads/2016/09/folding-at-home-logo.png"
 project_blurb: "[Folding@home]({{ project_url }}) is a distributed computing project for simulating protein dynamics, including the process of protein folding and the movements of proteins implicated in a variety of diseases. It brings together citizen scientists who volunteer to run simulations of protein dynamics on their personal computers. Insights from this data are helping scientists to better understand biology, and providing new opportunities for developing therapeutics."
 project_lsio_github_repo_url: "https://github.com/linuxserver/docker-{{ project_name }}"
-
 # supported architectures
 available_architectures:
-  - { arch: "{{ arch_x86_64 }}", tag: "latest"}
-  - { arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
-
+  - {arch: "{{ arch_x86_64 }}", tag: "latest"}
+  - {arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
 # container parameters
 common_param_env_vars_enabled: true
 param_container_name: "{{ project_name }}"
 param_usage_include_env: true
 param_env_vars:
-  - { env_var: "ACCOUNT_TOKEN", env_value: "", desc: "Register for an account on `https://app.foldingathome.org` and retrieve account token in settings. Required on first start." }
-  - { env_var: "MACHINE_NAME", env_value: "", desc: "Assign a friendly name to this instance (no spaces). Required on first start." }
+  - {env_var: "ACCOUNT_TOKEN", env_value: "", desc: "Register for an account on `https://app.foldingathome.org` and retrieve account token in settings. Required on first start."}
+  - {env_var: "MACHINE_NAME", env_value: "", desc: "Assign a friendly name to this instance (no spaces). Required on first start."}
 param_usage_include_vols: true
 param_volumes:
-  - { vol_path: "/config", vol_host_path: "/path/to/{{ project_name }}/data", desc: "Where Folding@home should store its database and config." }
-
+  - {vol_path: "/config", vol_host_path: "/path/to/{{ project_name }}/data", desc: "Where Folding@home should store its database and config."}
 # optional container parameters
 opt_param_usage_include_env: true
 opt_param_env_vars:
-  - { env_var: "CLI_ARGS", env_value: "", desc: "Optionally pass additional cli arguments to `fah-client` on container start." }
+  - {env_var: "CLI_ARGS", env_value: "", desc: "Optionally pass additional cli arguments to `fah-client` on container start."}
 opt_param_usage_include_ports: true
 opt_param_ports:
-  - { external_port: "7396", internal_port: "7396", port_desc: "Folding@home web gui (redirects to [https://app.foldingathome.org](https://app.foldingathome.org))." }
+  - {external_port: "7396", internal_port: "7396", port_desc: "Folding@home web gui (redirects to [https://app.foldingathome.org](https://app.foldingathome.org))."}
 opt_param_device_map: false
 opt_param_devices:
-  - { device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Only needed if you want to use your Intel GPU (vaapi)." }
-
+  - {device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Only needed if you want to use your Intel GPU (vaapi)."}
 readonly_supported: true
-
 # application setup block
 app_setup_block_enabled: true
 app_setup_block: |
@@ -60,14 +55,57 @@ app_setup_block: |
   Hardware acceleration users for Nvidia will need to install the container runtime provided by Nvidia on their host, instructions can be found here:
   https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
   We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia container toolkit is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
-
+# init diagram
+init_diagram: |
+  "foldingathome:latest": {
+    docker-mods
+    base {
+      fix-attr +\nlegacy cont-init
+    }
+    docker-mods -> base
+    legacy-services
+    custom services
+    init-services -> legacy-services
+    init-services -> custom services
+    custom services -> legacy-services
+    legacy-services -> ci-service-check
+    init-migrations -> init-adduser
+    init-os-end -> init-config
+    init-config -> init-config-end
+    init-foldingathome-video -> init-config-end
+    init-os-end -> init-crontab-config
+    init-mods-end -> init-custom-files
+    base -> init-envfile
+    init-config -> init-foldingathome-config
+    init-foldingathome-config -> init-foldingathome-video
+    base -> init-migrations
+    base -> init-mods
+    init-config-end -> init-mods
+    init-mods -> init-mods-end
+    init-mods-package-install -> init-mods-end
+    init-mods -> init-mods-package-install
+    base -> init-os-end
+    init-adduser -> init-os-end
+    init-envfile -> init-os-end
+    init-migrations -> init-os-end
+    init-custom-files -> init-services
+    init-mods-end -> init-services
+    init-services -> svc-cron
+    svc-cron -> legacy-services
+    init-services -> svc-foldingathome
+    svc-foldingathome -> legacy-services
+  }
+  Base Images: {
+    "baseimage-ubuntu:noble"
+  }
+  "foldingathome:latest" <- Base Images
 # changelog
 changelogs:
-  - { date: "10.08.24:", desc: "Add libexpat1 for Nvidia support." }
-  - { date: "25.06.24:", desc: "***Breaking Changes*** - Please see the Application Setup section for more details. Restructure image for F@H v8." }
-  - { date: "15.06.24:", desc: "Rebase to Ubuntu Noble, add optional cli args." }
-  - { date: "14.12.22:", desc: "Rebase to Ubuntu Jammy, migrate to s6v3." }
-  - { date: "15.01.22:", desc: "Rebase to Ubuntu Focal. Add arm64v8 builds (cpu only). Increase verbosity about gpu driver permission settings." }
-  - { date: "09.01.21:", desc: "Add nvidia.icd." }
-  - { date: "14.04.20:", desc: "Add Folding@home donation links." }
-  - { date: "20.03.20:", desc: "Initial release." }
+  - {date: "10.08.24:", desc: "Add libexpat1 for Nvidia support."}
+  - {date: "25.06.24:", desc: "***Breaking Changes*** - Please see the Application Setup section for more details. Restructure image for F@H v8."}
+  - {date: "15.06.24:", desc: "Rebase to Ubuntu Noble, add optional cli args."}
+  - {date: "14.12.22:", desc: "Rebase to Ubuntu Jammy, migrate to s6v3."}
+  - {date: "15.01.22:", desc: "Rebase to Ubuntu Focal. Add arm64v8 builds (cpu only). Increase verbosity about gpu driver permission settings."}
+  - {date: "09.01.21:", desc: "Add nvidia.icd."}
+  - {date: "14.04.20:", desc: "Add Folding@home donation links."}
+  - {date: "20.03.20:", desc: "Initial release."}

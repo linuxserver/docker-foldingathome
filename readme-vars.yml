@@ -6,6 +6,7 @@ project_url: "https://foldingathome.org/"
 project_logo: "https://foldingathome.org/wp-content/uploads/2016/09/folding-at-home-logo.png"
 project_blurb: "[Folding@home]({{ project_url }}) is a distributed computing project for simulating protein dynamics, including the process of protein folding and the movements of proteins implicated in a variety of diseases. It brings together citizen scientists who volunteer to run simulations of protein dynamics on their personal computers. Insights from this data are helping scientists to better understand biology, and providing new opportunities for developing therapeutics."
 project_lsio_github_repo_url: "https://github.com/linuxserver/docker-{{ project_name }}"
+project_categories: "Science"
 # supported architectures
 available_architectures:
   - {arch: "{{ arch_x86_64 }}", tag: "latest"}

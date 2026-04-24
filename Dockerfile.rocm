@@ -28,9 +28,12 @@ RUN \
   echo "**** add rocm apt repo ****" && \
   curl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /usr/share/keyrings/rocm-archive-keyring.gpg && \
   echo "deb [arch=amd64 signed-by=/usr/share/keyrings/rocm-archive-keyring.gpg] https://repo.radeon.com/rocm/apt/${ROCM_VERSION} ${ROCM_APT_SUITE} main" > /etc/apt/sources.list.d/rocm.list && \
+  printf "Package: *\nPin: origin repo.radeon.com\nPin-Priority: 1001\n" > /etc/apt/preferences.d/rocm-pin && \
   apt-get update && \
-  apt-get install -y \
-    rocm-opencl-runtime && \
+  apt-get install -y --allow-downgrades \
+    hip-runtime-amd \
+    rocm-opencl-runtime \
+    rocm-hip-runtime && \
   ln -sf /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
   download_url="https://download.foldingathome.org/releases/public/fah-client/"$(curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("debian")) and (.package | contains("release"))) | .package' | grep -v "arm64" | grep "tar.bz2") && \

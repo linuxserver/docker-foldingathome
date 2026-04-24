@@ -78,6 +78,11 @@ Hardware acceleration users for Nvidia will need to install the container runtim
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
 We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia container toolkit is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
 
+### AMD / ROCm
+
+This repo also supports a ROCm-enabled image for AMD GPUs.
+ROCm containers need access to `/dev/kfd` and `/dev/dri` and usually require `video` and `render` groups.
+
 ## Read-Only Operation
 
 This image can be run with a read-only container filesystem. For details please [read the docs](https://docs.linuxserver.io/misc/read-only/).
@@ -110,6 +115,34 @@ services:
       - 7396:7396 #optional
     restart: unless-stopped
 ```
+
+### docker-compose (ROCm)
+
+```yaml
+---
+services:
+    foldingathome:
+        image: lscr.io/linuxserver/foldingathome:latest
+        container_name: foldingathome-rocm
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=Etc/UTC
+            - ACCOUNT_TOKEN=
+            - MACHINE_NAME=
+            - CLI_ARGS= #optional
+            # - HSA_OVERRIDE_GFX_VERSION=9.0.0 # Optional override for older devices
+        volumes:
+            - /path/to/foldingathome/data:/config
+        devices:
+            - /dev/kfd:/dev/kfd
+            - /dev/dri:/dev/dri
+        group_add:
+            - video
+            - render
+        ports:
+            - 7396:7396 #optional
+        restart: unless-stopped
 
 ### docker cli ([click here for more info](https://docs.docker.com/engine/reference/commandline/cli/))
 

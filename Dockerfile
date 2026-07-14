@@ -9,7 +9,7 @@ ARG FOLDINGATHOME_RELEASE
 LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 LABEL maintainer="aptalca"
 
-#Add needed nvidia environment variables for container toolkit
+# Add needed nvidia environment variables for container toolkit
 ENV NVIDIA_DRIVER_CAPABILITIES="compute,video,utility"
 
 # global environment settings
@@ -24,7 +24,10 @@ RUN \
     libexpat1 && \
   ln -s libOpenCL.so.1 /usr/lib/x86_64-linux-gnu/libOpenCL.so && \
   echo "**** install foldingathome ****" && \
-  download_url="https://download.foldingathome.org/releases/public/fah-client/"$(curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("debian")) and (.package | contains("release"))) | .package' | grep -v "arm64" | grep "tar.bz2") && \
+  if [ -z ${FOLDINGATHOME_RELEASE+x} ]; then \
+    FOLDINGATHOME_RELEASE=$(curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("amd64.deb")) and (.package | contains("release"))) | .package' | awk -F'(fah-client_|_amd64.deb)' '{print $2}' | sort -rV | head -1); \
+  fi && \
+  download_url="https://download.foldingathome.org/releases/public/fah-client/"$(curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("debian")) and (.package | contains("/release/"))) | .package' | grep -v "arm64" | grep "tar.bz2" | grep "${FOLDINGATHOME_RELEASE}") && \
   curl -o \
     /tmp/fah.tar.bz2 -L \
     ${download_url} && \

@@ -149,7 +149,7 @@ pipeline {
       steps{
         script{
           env.EXT_RELEASE = sh(
-            script: ''' curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("amd64.deb")) and (.package | contains("release"))) | .package' | awk -F'(fah-client_|_amd64.deb)' '{print $2}' ''',
+            script: ''' curl -s https://download.foldingathome.org/releases/public/fah-client/meta.json | jq -r '.[] | select((.package | contains("amd64.deb")) and (.package | contains("release"))) | .package' | awk -F'(fah-client_|_amd64.deb)' '{print $2}' | sort -rV | head -1 ''',
             returnStdout: true).trim()
             env.RELEASE_LINK = 'custom_command'
         }

@@ -10,6 +10,7 @@ project_categories: "Science"
 # supported architectures
 available_architectures:
   - {arch: "{{ arch_x86_64 }}", tag: "latest"}
+  - {arch: "{{ arch_x86_64 }}", tag: "rocm-latest"}
   - {arch: "{{ arch_arm64 }}", tag: "arm64v8-latest"}
 # container parameters
 common_param_env_vars_enabled: true
@@ -25,12 +26,14 @@ param_volumes:
 opt_param_usage_include_env: true
 opt_param_env_vars:
   - {env_var: "CLI_ARGS", env_value: "", desc: "Optionally pass additional cli arguments to `fah-client` on container start."}
+  - {env_var: "HSA_OVERRIDE_GFX_VERSION", env_value: "", desc: "Optional ROCm override for some AMD GPUs."}
 opt_param_usage_include_ports: true
 opt_param_ports:
   - {external_port: "7396", internal_port: "7396", port_desc: "Folding@home web gui (redirects to [https://app.foldingathome.org](https://app.foldingathome.org))."}
-opt_param_device_map: false
+opt_param_device_map: true
 opt_param_devices:
-  - {device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Only needed if you want to use your Intel GPU (vaapi)."}
+  - {device_path: "/dev/kfd", device_host_path: "/dev/kfd", desc: "Needed for ROCm compute access on AMD GPUs."}
+  - {device_path: "/dev/dri", device_host_path: "/dev/dri", desc: "Needed for GPU access (ROCm/DRM device mapping)."}
 readonly_supported: true
 # application setup block
 app_setup_block_enabled: true
@@ -56,6 +59,12 @@ app_setup_block: |
   Hardware acceleration users for Nvidia will need to install the container runtime provided by Nvidia on their host, instructions can be found here:
   https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
   We automatically add the necessary environment variable that will utilise all the features available on a GPU on the host. Once nvidia container toolkit is installed on your host you will need to re/create the docker container with the nvidia container runtime `--runtime=nvidia` and add an environment variable `-e NVIDIA_VISIBLE_DEVICES=all` (can also be set to a specific gpu's UUID, this can be discovered by running `nvidia-smi --query-gpu=gpu_name,gpu_uuid --format=csv` ). NVIDIA automatically mounts the GPU and drivers from your host into the foldingathome docker container.
+
+  ### AMD / ROCm
+
+  This repo also supports a ROCm-enabled image for AMD GPUs.
+  ROCm containers need access to `/dev/kfd` and `/dev/dri` and usually require `video` and `render` groups.
+  
 # init diagram
 init_diagram: |
   "foldingathome:latest": {
@@ -100,6 +109,7 @@ init_diagram: |
   "foldingathome:latest" <- Base Images
 # changelog
 changelogs:
+  - {date: "24.04.26:", desc: "Add ROCm support."}
   - {date: "10.08.24:", desc: "Add libexpat1 for Nvidia support."}
   - {date: "25.06.24:", desc: "***Breaking Changes*** - Please see the Application Setup section for more details. Restructure image for F@H v8."}
   - {date: "15.06.24:", desc: "Rebase to Ubuntu Noble, add optional cli args."}
